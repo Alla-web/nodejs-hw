@@ -3,9 +3,9 @@ import express from 'express';
 import cors from 'cors';
 
 import { connectMongoDB } from './db/connectMongoDB.js';
-import { logger } from './middleWare/logger.js';
-import { errorHadler } from './middleWare/errorHandler.js';
-import { notFoundHandler } from './middleWare/notFoundHandler.js';
+import { logger } from './middleware/logger.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
 import router from './routes/router.js';
 
 const app = express();
@@ -24,7 +24,7 @@ app.use(router);
 
 app.use(notFoundHandler);
 
-app.use(errorHadler);
+app.use(errorHandler);
 
 await connectMongoDB();
 

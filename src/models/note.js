@@ -14,7 +14,7 @@ const notesSchema = new Schema(
     },
     tag: {
       type: String,
-      requred: false,
+      required: false,
       default: 'Todo',
       enum: [
         'Work',
@@ -36,4 +36,4 @@ const notesSchema = new Schema(
   }
 );
 
-export const Note = model('Notes', notesSchema, 'notes');
+export const Note = model('Note', notesSchema, 'notes');

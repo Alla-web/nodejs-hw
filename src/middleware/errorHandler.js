@@ -1,10 +1,12 @@
 import createHttpError from 'http-errors';
 
-export const errorHadler = (err, req, res, next) => {
+export const errorHandler = (err, req, res, next) => {
   console.error('Error Middleware:', err);
 
-  if ((!err) instanceof createHttpError) {
-    return res.status(err.status).json({ message: err.message || err.name });
+  if (createHttpError.isHttpError(err)) {
+    return res
+      .status(err.statusCode || err.status || 500)
+      .json({ message: err.message });
   }
 
   const isProd = process.env.NODE_ENV === 'production';
@@ -13,6 +15,5 @@ export const errorHadler = (err, req, res, next) => {
     message: isProd
       ? 'Something went wrong. Please try again later.'
       : err.message,
-    error: err.message,
   });
 };
