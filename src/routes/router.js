@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import noteRoutes from './noteRoutes.js';
+import noteRoutes from './notesRoutes.js';
 
 const router = Router();
 
