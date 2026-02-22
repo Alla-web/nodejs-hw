@@ -1,7 +1,7 @@
 import { Note } from '../models/note.js';
 import createHttpError from 'http-errors';
 import mongoose from 'mongoose';
-import noteRoutes from '../routes/noteRoutes.js';
+import noteRoutes from '../routes/notesRoutes.js';
 
 export const getAllNotes = async (req, res) => {
   console.log('DN: ', mongoose.connection.name);
