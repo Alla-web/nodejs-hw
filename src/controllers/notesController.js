@@ -1,12 +1,7 @@
 import { Note } from '../models/note.js';
 import createHttpError from 'http-errors';
-import mongoose from 'mongoose';
-import noteRoutes from '../routes/notesRoutes.js';
 
 export const getAllNotes = async (req, res) => {
-  console.log('DN: ', mongoose.connection.name);
-  console.log('Collection: ', Note.collection.name);
-
   const notes = await Note.find();
   res.status(200).json({
     status: 200,
@@ -34,17 +29,23 @@ export const createNote = async (req, res) => {
   const newNote = await Note.create(req.body);
   res.status(201).json({
     status: 201,
-    message: 'New note successfuly created',
+    message: 'New note successfully created',
     data: newNote,
   });
 };
 
 export const deleteNote = async (req, res) => {
   const noteId = await req.params.noteId;
-  const deletedNote = await Note.findByIdAndDelete({ _id: noteId });
+
+  const deletedNote = await Note.findByIdAndDelete(noteId);
+
+  if (!deletedNote) {
+    throw createHttpError(404, `Note with ID: ${noteId} not found`);
+  }
+
   res.status(200).json({
     status: 200,
-    message: `Note with ID: ${noteId} seccessfuly deleted`,
+    message: `Note with ID: ${noteId} successfully deleted`,
     data: deletedNote,
   });
 };
@@ -52,7 +53,7 @@ export const deleteNote = async (req, res) => {
 export const updateNote = async (req, res) => {
   const noteId = await req.params.noteId;
 
-  const updatedNote = await Note.findByIdAndUpdate({ _id: noteId }, req.body, {
+  const updatedNote = await Note.findByIdAndUpdate(noteId, req.body, {
     new: true,
   });
 
@@ -62,7 +63,7 @@ export const updateNote = async (req, res) => {
 
   res.status(200).json({
     status: 200,
-    message: `Note with ID: ${noteId} successfuly updated`,
+    message: `Note with ID: ${noteId} successfully updated`,
     data: updatedNote,
   });
 };
