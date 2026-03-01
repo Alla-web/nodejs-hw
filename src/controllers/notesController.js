@@ -1,4 +1,4 @@
-import { Note } from '../models/note.js';
+import Note from '../models/note.js';
 import createHttpError from 'http-errors';
 
 export const getAllNotes = async (req, res) => {
@@ -9,12 +9,7 @@ export const getAllNotes = async (req, res) => {
   const noteQuery = Note.find();
 
   if (search) {
-    noteQuery.where({
-      $or: [
-        { title: { $regex: search, $options: 'i' } },
-        { content: { $regex: search, $options: 'i' } },
-      ],
-    });
+    noteQuery.where({ $text: { $search: search } });
   }
 
   if (tag) noteQuery.where('tag').equals(tag);
