@@ -13,11 +13,12 @@ import {
   updateNoteSchema,
   createNoteSchema,
   noteIdSchema,
+  getAllNotesSchema,
 } from '../validations/notesValidation.js';
 
 const noteRoutes = Router();
 
-noteRoutes.get('/notes', getAllNotes);
+noteRoutes.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
 noteRoutes.get('/notes/:noteId', celebrate(noteIdSchema), getNoteById);
 noteRoutes.post('/notes', celebrate(createNoteSchema), createNote);
 noteRoutes.delete('/notes/:noteId', celebrate(noteIdSchema), deleteNote);
