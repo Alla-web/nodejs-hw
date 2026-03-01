@@ -17,12 +17,10 @@ import {
 
 const noteRoutes = Router();
 
-noteRoutes.use('/notes/:noteId', celebrate(noteIdSchema));
-
 noteRoutes.get('/notes', getAllNotes);
-noteRoutes.get('/notes/:noteId', getNoteById);
+noteRoutes.get('/notes/:noteId', celebrate(noteIdSchema), getNoteById);
 noteRoutes.post('/notes', celebrate(createNoteSchema), createNote);
-noteRoutes.delete('/notes/:noteId', deleteNote);
+noteRoutes.delete('/notes/:noteId', celebrate(noteIdSchema), deleteNote);
 noteRoutes.patch('/notes/:noteId', celebrate(updateNoteSchema), updateNote);
 
 export default noteRoutes;
