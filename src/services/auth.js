@@ -12,7 +12,7 @@ export const createNewUser = async user => {
   return User.create(user);
 };
 
-export const createNewSessionService = async userId => {
+export const createSession = async userId => {
   const accessToken = bcrypto.randomBytes(30).toString('base64');
   const refreshToken = bcrypto.randomBytes(30).toString('base64');
 
