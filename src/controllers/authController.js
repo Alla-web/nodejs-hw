@@ -6,7 +6,7 @@ import { Session } from '../models/session.js';
 
 import {
   findUserService,
-  createNewSessionService,
+  createSession,
   setSessionCookies,
 } from '../services/auth.js';
 
@@ -20,7 +20,7 @@ export const registerUser = async (req, res) => {
 
   const newUser = await User.create({ email, password: hashPassword });
 
-  const newSession = await createNewSessionService(newUser._id);
+  const newSession = await createSession(newUser._id);
 
   setSessionCookies(res, newSession);
 
@@ -38,7 +38,7 @@ export const loginUser = async (req, res) => {
 
   await Session.deleteOne({ userId: user._id });
 
-  const newSession = await createNewSessionService(user._id);
+  const newSession = await createSession(user._id);
   setSessionCookies(res, newSession);
 
   res.status(200).json(user);
@@ -64,7 +64,7 @@ export const refreshUserSession = async (req, res) => {
   if (!session) throw createHttpError(401, 'Unauthorized: session not found');
 
   const isSessionTokenExpired =
-    new Date() > new Date(session.refreshtokenValidUntil);
+    new Date() > new Date(session.refreshTokenValidUntil);
   if (isSessionTokenExpired)
     throw createHttpError(401, 'Session token expired');
 
@@ -73,7 +73,7 @@ export const refreshUserSession = async (req, res) => {
     refreshToken: req.cookies.refreshToken,
   });
 
-  const newSession = await createNewSessionService(session.userId);
+  const newSession = await createSession(session.userId);
   setSessionCookies(res, newSession);
 
   res.status(200).json({ message: 'Session cuccessfuly refreshed' });
