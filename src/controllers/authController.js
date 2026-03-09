@@ -24,22 +24,21 @@ export const registerUser = async (req, res) => {
 
   setSessionCookies(res, newSession);
 
-  res.status(200).json(newUser);
+  res.status(201).json(newUser);
 };
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await findUserService(email);
-  if (!user) throw createHttpError(404, `User with email ${email} not found`);
+  if (!user) throw createHttpError(401, `User with email ${email} not found`);
 
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) throw createHttpError(401, 'Invalid credantials');
 
-  await Session.deleteOne({ iserId: user._id });
+  await Session.deleteOne({ userId: user._id });
 
   const newSession = await createNewSessionService(user._id);
-
   setSessionCookies(res, newSession);
 
   res.status(200).json(user);
@@ -53,7 +52,7 @@ export const logoutUser = async (req, res) => {
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
 
-  res.status(200).send();
+  res.status(204).send();
 };
 
 export const refreshUserSession = async (req, res) => {
@@ -65,7 +64,7 @@ export const refreshUserSession = async (req, res) => {
   if (!session) throw createHttpError(401, 'Unauthorized: session not found');
 
   const isSessionTokenExpired =
-    new Date() > new Date(session.refreshtokenValidUtil);
+    new Date() > new Date(session.refreshtokenValidUntil);
   if (isSessionTokenExpired)
     throw createHttpError(401, 'Session token expired');
 
