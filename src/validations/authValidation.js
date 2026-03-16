@@ -13,3 +13,18 @@ export const loginUserSchema = {
     password: Joi.string().required(),
   }),
 };
+
+export const requestResetEmailSchema = {
+  [Segments.BODY]: Joi.object({
+    email: Joi.string().email().required(),
+  }),
+};
+
+export const resetPaswordSchema = {
+  [Segments.BODY]: Joi.object({
+    password: Joi.string().min(8).required().messages({
+      'string.min': 'Password should have at least 8 characters',
+    }),
+    token: Joi.string().required(),
+  }),
+};
