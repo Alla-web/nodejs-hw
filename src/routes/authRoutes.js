@@ -4,12 +4,16 @@ import { celebrate } from 'celebrate';
 import {
   registerUserSchema,
   loginUserSchema,
+  requestResetEmailSchema,
+  resetPaswordSchema,
 } from '../validations/authValidation.js';
 import {
   registerUser,
   loginUser,
   logoutUser,
   refreshUserSession,
+  requestResetPassword,
+  resetPassword,
 } from '../controllers/authController.js';
 
 const routerAuth = Router();
@@ -21,5 +25,17 @@ routerAuth.post('/auth/login', celebrate(loginUserSchema), loginUser);
 routerAuth.post('/auth/logout', logoutUser);
 
 routerAuth.post('/auth/refresh', refreshUserSession);
+
+routerAuth.post(
+  '/auth/request-reset-email',
+  celebrate(requestResetEmailSchema),
+  requestResetPassword
+);
+
+routerAuth.post(
+  '/auth/reset-password',
+  celebrate(resetPaswordSchema),
+  resetPassword
+);
 
 export default routerAuth;
