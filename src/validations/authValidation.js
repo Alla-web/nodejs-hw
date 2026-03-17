@@ -20,7 +20,7 @@ export const requestResetEmailSchema = {
   }),
 };
 
-export const resetPaswordSchema = {
+export const resetPasswordSchema = {
   [Segments.BODY]: Joi.object({
     password: Joi.string().min(8).required().messages({
       'string.min': 'Password should have at least 8 characters',

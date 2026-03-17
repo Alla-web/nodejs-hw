@@ -84,7 +84,7 @@ export const refreshUserSession = async (req, res) => {
   res.status(200).json({ message: 'Session cuccessfuly refreshed' });
 };
 
-export const requestResetPassword = async (req, res) => {
+export const requestResetEmail = async (req, res) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email });
@@ -139,7 +139,7 @@ export const resetPassword = async (req, res) => {
   try {
     payload = jwt.verify(token, process.env.JWT_SECRET);
   } catch {
-    throw createHttpError(404, 'User not found');
+    throw createHttpError(401, 'User not found');
   }
 
   const user = await User.findOne({
